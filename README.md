@@ -1,73 +1,173 @@
-# Welcome to your Lovable project
+# Emeis Marketing Website
 
-## Project info
+A professional, responsive marketing website for Emeis (elderly care / nursing homes) that rebuilds trust through transparency.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 Quick Start
 
-## How can I edit this code?
+### Prerequisites
+- Node.js 18+ installed
+- npm or yarn package manager
 
-There are several ways of editing your application.
+### Installation
 
-**Use Lovable**
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd emeis-website
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+# Install dependencies
+npm install
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The site will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📦 Build & Deploy
 
-**Use GitHub Codespaces**
+### Build for Production
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+npm run build
+```
 
-## What technologies are used for this project?
+This creates a `dist/` folder with optimized static files.
 
-This project is built with:
+### Deploy to GitHub Pages
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+#### Option 1: Manual Deployment
 
-## How can I deploy this project?
+1. Build the project:
+   ```bash
+   npm run build
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+2. Deploy the `dist` folder to GitHub Pages:
+   ```bash
+   npx gh-pages -d dist
+   ```
 
-## Can I connect a custom domain to my Lovable project?
+#### Option 2: GitHub Actions (Recommended)
 
-Yes, you can!
+Create `.github/workflows/deploy.yml`:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```yaml
+name: Deploy to GitHub Pages
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build
+        run: npm run build
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+```
+
+3. In your repository settings, set GitHub Pages source to "gh-pages" branch.
+
+### Base URL Configuration
+
+For GitHub Pages with a project subdirectory, update `vite.config.ts`:
+
+```typescript
+export default defineConfig({
+  base: '/your-repo-name/',
+  // ... rest of config
+})
+```
+
+## 🧪 A/B Testing
+
+The site includes a built-in A/B testing framework. See [docs/ab-tests.md](docs/ab-tests.md) for details.
+
+### Quick Usage
+
+- Add URL params to force variants: `?exp_transparency=B&exp_reviews=B`
+- Enable debug panel: `?debug=1`
+- View analytics: `/debug/analytics`
+
+## 📊 Analytics
+
+All user interactions are tracked locally:
+
+- Events logged to `console.log` and `localStorage`
+- View all events at `/debug/analytics`
+- Export events as JSON for analysis
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/
+│   ├── common/         # Shared components (badges, headers)
+│   ├── debug/          # Debug panel for A/B tests
+│   ├── home/           # Homepage sections
+│   ├── layout/         # Header, Footer, Layout
+│   └── ui/             # shadcn/ui components
+├── data/
+│   └── mockData.ts     # JSON mock data
+├── lib/
+│   ├── analytics.ts    # Event tracking
+│   ├── experiments.ts  # A/B testing framework
+│   └── utils.ts        # Utility functions
+├── pages/              # Route pages
+└── index.css           # Design system tokens
+```
+
+## 🎨 Design System
+
+Colors, typography, and spacing are defined in:
+- `src/index.css` - CSS custom properties
+- `tailwind.config.ts` - Tailwind configuration
+
+Key design tokens:
+- `--primary` - Trust green (sage)
+- `--warm-gold` - Accent for ratings/highlights
+- `--calm-blue` - Secondary accent
+- `--soft-coral` - Tertiary accent
+
+## 📱 Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Homepage with all key sections |
+| `/transparency` | Virtual tours, care tracking demo |
+| `/reviews` | Filtered, verified family reviews |
+| `/admission` | Guided checklist for admission |
+| `/family-portal` | Family Trust Loop features |
+| `/about-transformation` | Documentary-style story |
+| `/debug/analytics` | Analytics debug view |
+
+## 🛠️ Tech Stack
+
+- **Framework**: React 18 + TypeScript
+- **Build**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui (customized)
+- **Routing**: React Router v6
+- **Icons**: Lucide React
+
+## 📄 License
+
+MIT License - See LICENSE file for details.
